@@ -63,19 +63,24 @@ public class HashtableController {
       @PathVariable String key) throws IOException {
     // If I can't read from input stream, there is nothing I can do about it.
     InputStream input = request.getInputStream();
-    byte[] value = new byte[request.getContentLength()];
-    input.read(value, 0, request.getContentLength());
-    String userInfo = request.getRemoteAddr();
-    hashtableSvc.put(key, value, userInfo);
-    return constructModelAndView(gson.toJson(Boolean.TRUE));
+    int length = request.getContentLength();
+    if (length != -1) {
+      byte[] value = new byte[length];
+      input.read(value, 0, request.getContentLength());
+      String userIP = request.getRemoteAddr();
+      int userPort = request.getRemotePort();
+      hashtableSvc.put(key, new String(value, "UTF-8"), String.format("%s:%s", userIP, userPort));
+      return constructModelAndView(gson.toJson(Boolean.TRUE));
+    } else {
+      throw new IOException("Content-Length unknown.");
+    }
   }
   
   @RequestMapping(value = "/hashtable/{key}/{value}")
   public ModelAndView put(HttpServletRequest request, HttpServletResponse response, 
       @PathVariable String key, @PathVariable String value) throws IOException {
     String userInfo = request.getRemoteAddr();
-    byte[] valueBytes = value.getBytes("UTF-8");
-    hashtableSvc.put(key, valueBytes, userInfo);
+    hashtableSvc.put(key, value, userInfo);
     return constructModelAndView(gson.toJson(Boolean.TRUE));
   }
   

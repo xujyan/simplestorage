@@ -26,7 +26,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.IdentityType;
 
-import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Text;
 
 
 /**
@@ -44,7 +44,7 @@ public class HashtableEntry {
   @Persistent
   private String key;
   @Persistent
-  private Blob value;
+  private Text value;
   @Persistent
   private Date timestamp;
   @Persistent
@@ -64,14 +64,14 @@ public class HashtableEntry {
   /**
    * @return the value
    */
-  public byte[] getValue() {
-    return value.getBytes();
+  public String getValue() {
+    return value.getValue();
   }
   /**
    * @param value the value to set
    */
-  public void setValue(byte[] value) {
-    this.value = new Blob(value);
+  public void setValue(String value) {
+    this.value = new Text(value);
   }
   /**
    * @return the timestamp
@@ -105,9 +105,9 @@ public class HashtableEntry {
     return id;
   }
   
-  public HashtableEntry(String key, byte[] value, String userInfo) {
+  public HashtableEntry(String key, String value, String userInfo) {
     this.key = key;
-    this.value = new Blob(value);
+    this.value = new Text(value);
     this.timestamp = new Date();
     this.userInfo = userInfo;
   }

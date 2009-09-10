@@ -25,16 +25,16 @@ import java.util.List;
  *
  */
 public class HashtableGetResult {
-  private final List<byte[]> values;
+  private final List<String> values;
   
   /**
    * @return the values
    */
-  public List<byte[]> getValues() {
+  public List<String> getValues() {
     return values;
   }
 
-  public HashtableGetResult(List<byte[]> values) {
+  public HashtableGetResult(List<String> values) {
     this.values = values;
   }
 }

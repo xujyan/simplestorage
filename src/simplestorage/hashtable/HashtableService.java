@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 package simplestorage.hashtable;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,7 @@ import javax.jdo.Query;
  *
  */
 public class HashtableService {
-  public void put(String key, byte[] value, String userInfo) throws UnsupportedEncodingException {
+  public void put(String key, String value, String userInfo) {
     HashtableEntry entry = new HashtableEntry(key, value, userInfo);
     PersistenceManager pm = PMF.get().getPersistenceManager();
     try {
@@ -42,12 +41,14 @@ public class HashtableService {
   
   public HashtableGetResult get(String key) {
     PersistenceManager pm = PMF.get().getPersistenceManager();
-    Query query = pm.newQuery(HashtableEntry.class);
-    query.setFilter("key == keyParam");
+    Query query = pm.newQuery(HashtableEntry.class, 
+        "key == keyParam");
+    query.setOrdering("timestamp desc");
     query.declareParameters("String keyParam");
+    
     try {
       List<HashtableEntry> entries = (List<HashtableEntry>)query.execute(key);
-      List<byte[]> values = new ArrayList<byte[]>();
+      List<String> values = new ArrayList<String>();
       for(HashtableEntry entry : entries) {
         values.add(entry.getValue());
       }
