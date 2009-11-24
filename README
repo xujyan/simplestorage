@@ -1,0 +1,12 @@
+This project aims to provide a set of simple storage services ready to be deployed on Google's appengine.
+
+Simple Hashtable service (one key multiple values):
+
+Get:
+* /hashtable/key [HTTP GET]
+* JSON results: {"values":[item1, item2...]}
+
+Put:
+* /hashtable/key [HTTP POST, input as the value] or
+* /hashtable/key/value [Whatever HTTP method]
+* results: "true"/"false"
